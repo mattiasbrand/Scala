@@ -26,9 +26,7 @@ class Board {
   def printBoard {
     Console.println("")
     Console.println(" *** Board status *** ")
-    Console.println(board(0)(0).toString() + board(0)(1).toString() + board(0)(2).toString())
-    Console.println(board(1)(0).toString() + board(1)(1).toString() + board(1)(2).toString())
-    Console.println(board(2)(0).toString() + board(2)(1).toString() + board(2)(2).toString())
+    board.map(row => Console.println(row.foldLeft("")((result, item) => result + item.toString())))
   }
 
   def isWinningMove(player: Int, row: Int, col: Int):Boolean = {
@@ -36,7 +34,24 @@ class Board {
     var vertical = board.map(x => x(col))
     if(vertical.exists(x => x != player) == false) { return true }
 
+    if(checkForwardDiag() == true) return true
+    if(checkBackwardDiag() == true) return true
+
     return false
+  }
+
+  def checkForwardDiag():Boolean = {
+    for(i <- 0 until n) {
+      if(board(i)(i) != currentPlayer) return false
+    }
+    return true
+  }
+
+  def checkBackwardDiag():Boolean = {
+    for(i <- 0 until n) {
+      if(board(i)(n-i-1) != currentPlayer) return false
+    }
+    return true
   }
 }
 
